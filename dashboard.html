@@ -1,0 +1,95 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="refresh" content="20"> <!-- Refresh every 20 seconds. Not an actual API call, so can be very generous -->
+    <style>
+            body {
+                background-color: white !important; /* Ensures the background is white, even with dark mode on */
+                font-family: 'Segoe UI', sans-serif; /* Sets the font for the entire document */
+            }
+
+            table {
+                width: 100%;
+                border-spacing: 3px 5px; /* Increase spacing for outside borders */
+                border-collapse: separate; /* Prevents merging of borders */
+                padding: 5px; /* Padding around the table */
+                overflow: hidden; /* Ensures child elements respect border-radius */
+                border-radius: 8px; /* Rounds the corners of the table container */
+                box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7); /* Even shadow around all sides */
+            }
+
+            td {
+                padding: 8px; /* Padding for all sides */
+            }
+
+            /* First column styles */
+            .category {
+                font-size: 21px;
+                font-weight: bold;
+                color: white;
+                text-align: center;
+                width: 50px; /* Fixed width */
+                height: 50px; /* Matches width for square effect */
+                border-top-left-radius: 8px; /* Rounds the top-left corner */
+                border-bottom-left-radius: 8px; /* Rounds the bottom-left corner */
+                border-top-right-radius: 8px; /* Rounds the top-right corner */
+                border-bottom-right-radius: 8px; /* Rounds the bottom-right corner */
+            }
+
+            /* Regular content styles */
+            .content {
+                font-size: 16px;
+                color: #1c1c1c;
+                font-weight: normal;
+            }
+            
+            .expand {
+                width: auto; /* Second column auto expands */
+                text-align: left; /* Left-aligned text */
+                border-top-left-radius: 8px; /* Rounds the top-left corner */
+                border-bottom-left-radius: 8px; /* Rounds the bottom-left corner */
+            }
+            
+            .time {
+                font-size: 16px;
+                width: 60px; /* Increased width for the third column */
+                text-align: left; /* Left-aligned text */
+                border-top-right-radius: 8px; /* Rounds the top-right corner */
+                border-bottom-right-radius: 8px; /* Rounds the bottom-right corner */
+            }
+            .destination {
+                font-weight: bold;
+            }
+
+            .regular {
+                font-weight: normal;
+                color: #1c1c1c;
+            }
+
+            /* Animation for row removal */
+            @keyframes fadeOut {
+                from {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateX(-100%);
+                }
+            }
+
+            .fade-out {
+                animation: fadeOut 0.5s ease-out;
+            }
+        </style>
+    </head>
+    <body>
+        <table>
+    <tr><td class='category' style='background-color: #F99D1C;'>T1</td><td class='content expand' style='background-color: #FEE7C7;'><span class='destination'>Central</span><br><span class='regular'>Platform 3</span></td><td class='time' style='background-color: #FEE7C7; color: black;'>7 min</td></tr><tr><td class='category' style='background-color: #83D0F5;'>500N</td><td class='content expand' style='background-color: #E0F3FC;'><span class='destination'>City Hyde Park</span><br><span class='regular'>Stand A2</span></td><td class='time' style='background-color: #E0F3FC; color: black;'>11 min</td></tr><tr><td class='category' style='background-color: #CD0D4D;'>L4</td><td class='content expand' style='background-color: #F2C2D2;'><span class='destination'>Carlingford</span></td><td class='time' style='background-color: #F2C2D2; color: black;'>13 min</td></tr><tr><td class='category' style='background-color: #CD0D4D;'>L4</td><td class='content expand' style='background-color: #F2C2D2;'><span class='destination'>Westmead</span></td><td class='time' style='background-color: #F2C2D2; color: black;'>16 min</td></tr><tr><td class='category' style='background-color: #F99D1C;'>T1</td><td class='content expand' style='background-color: #FEE7C7;'><span class='destination'>Blacktown</span><br><span class='regular'>Platform 4</span></td><td class='time' style='background-color: #FEE7C7; color: black;'>18 min</td></tr><tr><td class='category' style='background-color: #F99D1C;'>T1</td><td class='content expand' style='background-color: #FEE7C7;'><span class='destination'>Blacktown</span><br><span class='regular'>Platform 4</span></td><td class='time' style='background-color: #FEE7C7; color: black;'>21 min</td></tr><tr><td class='category' style='background-color: #83D0F5;'>550</td><td class='content expand' style='background-color: #E0F3FC;'><span class='destination'>Macquarie Park</span><br><span class='regular'>Stand A2</span></td><td class='time' style='background-color: #E0F3FC; color: black;'>23 min</td></tr><tr><td class='category' style='background-color: #C4258F;'>T5</td><td class='content expand' style='background-color: #F0C8E3;'><span class='destination'>Richmond</span><br><span class='regular'>Platform 4</span></td><td class='time' style='background-color: #F0C8E3; color: black;'>25 min</td></tr><tr><td class='category' style='background-color: #CD0D4D;'>L4</td><td class='content expand' style='background-color: #F2C2D2;'><span class='destination'>Carlingford</span></td><td class='time' style='background-color: #F2C2D2; color: black;'>28 min</td></tr><tr><td class='category' style='background-color: #F99D1C;'>T1</td><td class='content expand' style='background-color: #FEE7C7;'><span class='destination'>Blacktown</span><br><span class='regular'>Platform 4</span></td><td class='time' style='background-color: #FEE7C7; color: black;'>31 min</td></tr><tr><td class='category' style='background-color: #CD0D4D;'>L4</td><td class='content expand' style='background-color: #F2C2D2;'><span class='destination'>Westmead</span></td><td class='time' style='background-color: #F2C2D2; color: black;'>31 min</td></tr><tr><td class='category' style='background-color: #001b3d;'>N71</td><td class='content expand' style='background-color: #BFC6CE;'><span class='destination'>Town Hall Park St</span><br><span class='regular'>Stand A2</span></td><td class='time' style='background-color: #BFC6CE; color: black;'>34 min</td></tr><tr><td class='category' style='background-color: #CD0D4D;'>L4</td><td class='content expand' style='background-color: #F2C2D2;'><span class='destination'>Carlingford</span></td><td class='time' style='background-color: #F2C2D2; color: black;'>43 min</td></tr><tr><td class='category' style='background-color: #CD0D4D;'>L4</td><td class='content expand' style='background-color: #F2C2D2;'><span class='destination'>Westmead</span></td><td class='time' style='background-color: #F2C2D2; color: black;'>46 min</td></tr><tr><td class='category' style='background-color: #001b3d;'>N71</td><td class='content expand' style='background-color: #BFC6CE;'><span class='destination'>Richmond Station</span><br><span class='regular'>Stand B2</span></td><td class='time' style='background-color: #BFC6CE; color: black;'>51 min</td></tr><tr><td class='category' style='background-color: #CD0D4D;'>L4</td><td class='content expand' style='background-color: #F2C2D2;'><span class='destination'>Carlingford</span></td><td class='time' style='background-color: #F2C2D2; color: black;'>59 min</td></tr>
+        </table>
+    </body>
+    </html>
+    

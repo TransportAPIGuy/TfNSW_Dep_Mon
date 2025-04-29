@@ -1,0 +1,146 @@
+[
+    {
+        "platform": "",
+        "destination": "Westmead",
+        "via": "",
+        "minutes_until_departure": 5,
+        "line": "L4",
+        "line_color_dark": "#CD0D4D",
+        "line_color_light": "#F2C2D2"
+    },
+    {
+        "platform": "",
+        "destination": "Carlingford",
+        "via": "",
+        "minutes_until_departure": 6,
+        "line": "L4",
+        "line_color_dark": "#CD0D4D",
+        "line_color_light": "#F2C2D2"
+    },
+    {
+        "platform": "Stand B4",
+        "destination": "Rouse Hill Station",
+        "via": "",
+        "minutes_until_departure": 6,
+        "line": "665",
+        "line_color_dark": "#83D0F5",
+        "line_color_light": "#E0F3FC"
+    },
+    {
+        "platform": "Stand A2",
+        "destination": "Macquarie Park",
+        "via": "",
+        "minutes_until_departure": 8,
+        "line": "550",
+        "line_color_dark": "#83D0F5",
+        "line_color_light": "#E0F3FC"
+    },
+    {
+        "platform": "Stand B1",
+        "destination": "Hurstville Stn",
+        "via": "",
+        "minutes_until_departure": 9,
+        "line": "M91",
+        "line_color_dark": "#83D0F5",
+        "line_color_light": "#E0F3FC"
+    },
+    {
+        "platform": "Platform 2",
+        "destination": "Lithgow",
+        "via": "",
+        "minutes_until_departure": 11,
+        "line": "BMT",
+        "line_color_dark": "#F99D1C",
+        "line_color_light": "#FDE6C6"
+    },
+    {
+        "platform": "Platform 1",
+        "destination": "Central",
+        "via": "",
+        "minutes_until_departure": 13,
+        "line": "BMT",
+        "line_color_dark": "#F99D1C",
+        "line_color_light": "#FDE6C6"
+    },
+    {
+        "platform": "",
+        "destination": "Carlingford",
+        "via": "",
+        "minutes_until_departure": 13,
+        "line": "L4",
+        "line_color_dark": "#CD0D4D",
+        "line_color_light": "#F2C2D2"
+    },
+    {
+        "platform": "",
+        "destination": "Westmead",
+        "via": "",
+        "minutes_until_departure": 13,
+        "line": "L4",
+        "line_color_dark": "#CD0D4D",
+        "line_color_light": "#F2C2D2"
+    },
+    {
+        "platform": "Stand A3",
+        "destination": "North Ryde",
+        "via": "",
+        "minutes_until_departure": 13,
+        "line": "545",
+        "line_color_dark": "#83D0F5",
+        "line_color_light": "#E0F3FC"
+    },
+    {
+        "platform": "Platform 2",
+        "destination": "Schofields",
+        "via": "",
+        "minutes_until_departure": 15,
+        "line": "T1",
+        "line_color_dark": "#F99D1C",
+        "line_color_light": "#FEE7C7"
+    },
+    {
+        "platform": "Platform 1",
+        "destination": "Berowra",
+        "via": "Gordon",
+        "minutes_until_departure": 16,
+        "line": "T1",
+        "line_color_dark": "#F99D1C",
+        "line_color_light": "#FEE7C7"
+    },
+    {
+        "platform": "Platform 4",
+        "destination": "City Circle",
+        "via": "Strathfield",
+        "minutes_until_departure": 16,
+        "line": "T2",
+        "line_color_dark": "#0098CD",
+        "line_color_light": "#BFE5F2"
+    },
+    {
+        "platform": "Platform 3",
+        "destination": "Blacktown",
+        "via": "",
+        "minutes_until_departure": 18,
+        "line": "T5",
+        "line_color_dark": "#C4258F",
+        "line_color_light": "#F0C8E3"
+    },
+    {
+        "platform": "Platform 2",
+        "destination": "Emu Plains",
+        "via": "",
+        "minutes_until_departure": 18,
+        "line": "T1",
+        "line_color_dark": "#F99D1C",
+        "line_color_light": "#FEE7C7"
+    },
+    {
+        "platform": "",
+        "destination": "Carlingford",
+        "via": "",
+        "minutes_until_departure": 20,
+        "line": "L4",
+        "line_color_dark": "#CD0D4D",
+        "line_color_light": "#F2C2D2"
+    }
+]
