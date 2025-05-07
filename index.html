@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="30">
+    <!-- Refresh in seconds - refreshed the who page, need to replace with something that just updates the JSON -->
+    <title>Departures</title>
+    <style>
+        body {
+            /* Ensures the background is white, even with dark mode on */
+            font-family: 'Segoe UI', sans-serif;
+            /* Sets the font for the entire document */
+        }
+
+        table {
+            width: 100%;
+            border-spacing: 3px 5px;
+            /* Increase spacing for outside borders */
+            border-collapse: separate;
+            /* Prevents merging of borders */
+            padding: 5px;
+            /* Padding around the table */
+            overflow: hidden;
+            /* Ensures child elements respect border-radius */
+            border-radius: 8px;
+            /* Rounds the corners of the table container */
+            background-color: transparent;
+            /* Ensure the table background is transparent */
+        }
+
+        td {
+            padding: 8px;
+            /* Padding for all sides */
+            background-color: transparent;
+            /* Remove default white background */
+        }
+
+        tr {
+            overflow: hidden;
+            /* Prevent content from spilling outside rounded corners */
+            border-radius: 8px;
+            /* Apply rounded corners to rows */
+        }
+
+        /* First column styles */
+        .category {
+            font-size: 21px;
+            font-weight: bold;
+            color: white;
+            /* will always be white for the line icon */
+            text-align: center;
+            width: 50px;
+            /* Fixed width */
+            height: 50px;
+            /* Matches width for square effect */
+            border-top-left-radius: 8px;
+            /* Rounds the top-left corner */
+            border-bottom-left-radius: 8px;
+            /* Rounds the bottom-left corner */
+            border-top-right-radius: 8px;
+            /* Rounds the top-right corner */
+            border-bottom-right-radius: 8px;
+            /* Rounds the bottom-right corner */
+        }
+
+        /* Regular content styles */
+        .content {
+            font-size: 16px;
+            font-weight: normal;
+        }
+
+        .expand {
+            width: auto;
+            /* Second column auto expands */
+            text-align: left;
+            /* Left-aligned text */
+            border-top-left-radius: 8px;
+            /* Rounds the top-left corner */
+            border-bottom-left-radius: 8px;
+            /* Rounds the bottom-left corner */
+        }
+
+        .time {
+            font-size: 16px;
+            width: 60px;
+            /* Increased width for the third column */
+            text-align: left;
+            /* Left-aligned text */
+            border-top-right-radius: 8px;
+            /* Rounds the top-right corner */
+            border-bottom-right-radius: 8px;
+            /* Rounds the bottom-right corner */
+        }
+
+        .destination {
+            font-weight: bold;
+        }
+
+        .regular {
+            font-weight: normal;
+        }
+
+        .red-text {
+            color: red;
+            /* Normal red for light mode */
+        }
+
+        body.dark-mode .red-text {
+            color: rgb(255, 146, 146);
+            /* Bright red for dark mode */
+        }
+
+        /* Add hover effect for table rows */
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            /* Increase alpha for less transparency */
+            transition: background-color 0.2s ease-in-out;
+            /* Smooth transition */
+        }
+
+        /* Tooltip styles */
+        .tooltip {
+            position: absolute;
+            background-color: #333;
+            /* Default dark background */
+            color: white;
+            /* Default light text */
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+            max-width: 90%;
+            font-size: 14px;
+        }
+
+        body:not(.dark-mode) .tooltip {
+            background-color: white;
+            /* Light background for light mode */
+            color: black;
+            /* Dark text for light mode */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <table id="departures-table">
+        <!-- Table rows will be dynamically populated -->
+    </table>
+
+    <script>
+        async function fetchDepartures() {
+            try {
+                const response = await fetch(`output.json?timestamp=${Date.now()}`);
+                console.log('Response status:', response.status); // Debugging
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const departures = await response.json();
+                console.log('Fetched departures:', departures); // Debugging
+
+                const table = document.getElementById('departures-table');
+                table.innerHTML = ''; // Clear existing rows
+
+                departures.forEach(departure => {
+                    console.log('Processing departure:', departure); // Debugging
+                    const row = document.createElement('tr');
+
+                    // Line (category) column
+                    const lineCell = document.createElement('td');
+                    lineCell.className = 'category';
+
+                    // Use line_colour for both dark and light colors
+                    const darkColor = departure.line_colour || '#000000';
+                    const lightColor = `${darkColor}1C`; // Append transparency for light color
+
+                    lineCell.style.backgroundColor = darkColor;
+
+                    // Adjust font size if the line is 4 characters
+                    if (departure.line.length === 4) {
+                        lineCell.style.fontSize = '18px'; // Slightly smaller font size
+                    } else {
+                        lineCell.style.fontSize = '21px'; // Default font size
+                    }
+
+                    lineCell.textContent = departure.line;
+                    row.appendChild(lineCell);
+
+                    // Destination and platform column (2nd column)
+                    const contentCell = document.createElement('td');
+                    contentCell.className = 'content expand';
+                    contentCell.style.backgroundColor = hexToRgba(lightColor);
+
+                    // Remove tooltip creation and event listeners
+                    if (departure.alerts && departure.alerts.length > 0) {
+                        const alert = departure.alerts[0];
+                        const alertType = alert.alert_type; // Get the alert type
+                        const emoji = alertType === 'alert' ? '⚠️' : 'ℹ️'; // Use ⚠️ for alert and ℹ️ for info
+
+                        const warningEmoji = document.createElement('span');
+                        warningEmoji.textContent = `${emoji} `;
+                        warningEmoji.style.cursor = 'pointer'; // Change cursor to pointer for interactivity
+
+                        // Attach hover and click events to the emoji
+                        attachTooltipEvents(warningEmoji, alert.subtitle, alert.content);
+
+                        contentCell.appendChild(warningEmoji); // Add the emoji to the 2nd column
+                    }
+
+                    const destinationSpan = document.createElement('span');
+                    destinationSpan.className = 'destination';
+                    destinationSpan.textContent = departure.destination;
+                    contentCell.appendChild(destinationSpan);
+
+                    if (departure.via) {
+                        const viaSpan = document.createElement('span');
+                        viaSpan.className = 'regular';
+                        viaSpan.style.fontSize = '0.9em';
+                        viaSpan.textContent = ` via ${departure.via}`;
+                        contentCell.appendChild(viaSpan);
+                    }
+
+                    if (departure.platform) {
+                        const platformSpan = document.createElement('span');
+                        platformSpan.className = 'regular';
+                        platformSpan.innerHTML = `<br>${departure.platform}`;
+                        contentCell.appendChild(platformSpan);
+                    }
+
+                    row.appendChild(contentCell);
+
+                    // Minutes until departure column (4th column, previously 3rd)
+                    const timeCell = document.createElement('td');
+                    timeCell.className = 'time';
+                    timeCell.style.backgroundColor = hexToRgba(lightColor);
+                    timeCell.textContent = departure.minutes_until_departure === 0 ? 'Now' : `${departure.minutes_until_departure} min`;
+
+                    // Check if isRealtimeControlled is false
+                    if (!departure.isRealtimeControlled) {
+                        timeCell.style.color = 'rgb(143,143, 143)'; // Set text color to gray
+                    } else if (departure.delay > 5) {
+                        const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                        timeCell.style.color = isDarkMode ? 'rgb(255, 96, 96)' : 'red';
+                        timeCell.classList.add('red-text');
+                    } else {
+                        timeCell.style.color = '';
+                        timeCell.classList.remove('red-text');
+                    }
+
+                    row.appendChild(timeCell);
+
+                    table.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching or updating departures:', error);
+            }
+        }
+
+        // Utility function to convert #RRGGBBFF to rgba()
+        function hexToRgba(hex, alpha = 1) {
+            if (hex.length === 9) { // Check if it's in #RRGGBBFF format
+                const r = parseInt(hex.slice(1, 3), 16);
+                const g = parseInt(hex.slice(3, 5), 16);
+                const b = parseInt(hex.slice(5, 7), 16);
+                const a = parseInt(hex.slice(7, 9), 16) / 255; // Convert alpha to 0-1 range
+                return `rgba(${r}, ${g}, ${b}, ${a})`;
+            }
+            if (hex.length === 7) { // Handle #RRGGBB format
+                return `rgba(${parseInt(hex.slice(1, 3), 16)}, ${parseInt(hex.slice(3, 5), 16)}, ${parseInt(hex.slice(5, 7), 16)}, ${alpha})`;
+            }
+            return hex; // Return as-is if format is unexpected
+        }
+
+        // Fetch departures every 20 seconds
+        fetchDepartures();
+        setInterval(fetchDepartures, 20000);
+    </script>
+
+    <script>
+        function applyThemeBasedStyles() {
+            const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const table = document.getElementById('departures-table');
+            const body = document.body;
+
+            if (isDarkMode) {
+                // Dark mode styles
+                body.style.backgroundColor = '#333'; // Dark grey background for the page
+                body.style.color = 'white'; // White text color
+                table.style.backgroundColor = '#333'; // Dark grey table background
+                table.style.boxShadow = '0px 0px 15px rgba(255, 255, 255, 0.3)'; // White shadow
+            } else {
+                // Light mode styles
+                body.style.backgroundColor = 'white'; // White background for the page
+                body.style.color = 'black'; // Black text color
+                table.style.backgroundColor = 'white'; // White table background
+                table.style.boxShadow = '0px 0px 15px rgba(0, 0, 0, 0.7)'; // Black shadow
+            }
+        }
+
+        // Apply theme styles on page load
+        applyThemeBasedStyles();
+
+        // Listen for changes in the user's theme preference
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyThemeBasedStyles);
+    </script>
+
+    <script>
+        // Function to create and display the tooltip
+        function showTooltip(target, subtitle, content) {
+            // Remove any existing tooltip
+            const existingTooltip = document.querySelector('.tooltip');
+            if (existingTooltip) {
+                existingTooltip.remove();
+            }
+
+            // Create the tooltip element
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+
+            // Add subtitle and content with a line break
+            tooltip.innerHTML = `<strong>${subtitle}</strong><br><br>${content}`;
+
+            // Append tooltip to the body
+            document.body.appendChild(tooltip);
+
+            // Position the tooltip near the target element
+            const rect = target.getBoundingClientRect();
+            tooltip.style.left = `${rect.left + window.scrollX}px`;
+            tooltip.style.top = `${rect.bottom + window.scrollY + 5}px`;
+
+            // Apply dark mode styles dynamically
+            const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (isDarkMode) {
+                tooltip.style.backgroundColor = '#333'; // Dark background
+                tooltip.style.color = 'white'; // Light text
+            } else {
+                tooltip.style.backgroundColor = 'white'; // Light background
+                tooltip.style.color = 'black'; // Dark text
+            }
+
+            // Show the tooltip
+            tooltip.style.display = 'block';
+
+            // Hide the tooltip when clicking outside
+            const hideTooltip = (event) => {
+                if (!tooltip.contains(event.target) && event.target !== target) {
+                    tooltip.remove();
+                    document.removeEventListener('click', hideTooltip);
+                }
+            };
+            document.addEventListener('click', hideTooltip);
+        }
+
+        // Function to handle hover and click events
+        function attachTooltipEvents(emojiElement, subtitle, content) {
+            emojiElement.addEventListener('mouseenter', () => {
+                showTooltip(emojiElement, subtitle, content);
+            });
+
+            emojiElement.addEventListener('mouseleave', () => {
+                const tooltip = document.querySelector('.tooltip');
+                if (tooltip) {
+                    tooltip.remove();
+                }
+            });
+
+            emojiElement.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevent immediate removal on click
+                showTooltip(emojiElement, subtitle, content);
+            });
+        }
+    </script>
+</body>
+
+</html>
